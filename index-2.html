@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayuup Restaurant — Cuntada Soomaalida</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1e40af;
+  --blue-light: #3b82f6;
+  --blue-pale: #dbeafe;
+  --white: #ffffff;
+  --white-light: #f8fafc;
+  --green: #10b981;
+  --green-light: #34d399;
+  --dark: #0f172a;
+  --dark2: #1e293b;
+  --dark3: #334155;
+  --slate: #475569;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  cursor: none;
+  overflow-x: hidden;
+}
+
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--blue-light);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s, width 0.2s, height 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--blue-light);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.35s cubic-bezier(.25,.46,.45,.94), width 0.3s, height 0.3s, opacity 0.3s;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+}
+body:hover .cursor { opacity: 1; }
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: linear-gradient(to bottom, rgba(15,23,42,0.95), transparent);
+  backdrop-filter: blur(2px);
+  transition: background 0.4s;
+}
+nav.scrolled { background: rgba(15,23,42,0.97); }
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--blue-light);
+  letter-spacing: 0.05em;
+}
+.nav-logo span { color: var(--text); font-weight: 400; }
+
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--blue-light);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--blue-light); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-order-btn {
+  background: var(--blue-light);
+  color: var(--dark);
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 4px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.nav-order-btn:hover { background: var(--blue); transform: translateY(-1px); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; }
+.hamburger span { width: 26px; height: 2px; background: var(--blue-light); border-radius: 2px; transition: all 0.3s; }
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 60% 40%, rgba(59,130,246,0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 10% 80%, rgba(16,185,129,0.08) 0%, transparent 60%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.hero-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(59,130,246,0.02) 40px, rgba(59,130,246,0.02) 41px),
+    repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(59,130,246,0.02) 40px, rgba(59,130,246,0.02) 41px);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.hero-tag-line { width: 40px; height: 1px; background: var(--blue-light); }
+.hero-tag span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  animation: heroIn 1s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.hero h1 em { font-style: italic; color: var(--green-light); display: block; }
+
+.hero-desc {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  animation: heroIn 1s 0.2s ease forwards;
+  opacity: 0;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: heroIn 1s 0.4s ease forwards;
+  opacity: 0;
+}
+
+@keyframes heroIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-gold {
+  background: var(--blue-light);
+  color: var(--dark);
+  border: none;
+  padding: 1rem 2.2rem;
+  border-radius: 4px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-gold:hover { background: var(--blue); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(59,130,246,0.35); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(59,130,246,0.4);
+  padding: 1rem 2.2rem;
+  border-radius: 4px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--blue-light); color: var(--blue-light); }
+
+.hero-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: heroIn 1s 0.3s ease forwards;
+  opacity: 0;
+}
+
+.hero-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.hero-food-card {
+  background: var(--dark3);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.hero-food-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(59,130,246,0.08), transparent 60%);
+}
+.hero-food-card:hover { border-color: rgba(59,130,246,0.5); transform: translateY(-4px); }
+.hero-food-card .food-emoji { font-size: 2.8rem; margin-bottom: 0.5rem; display: block; }
+.hero-food-card .food-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--blue-light);
+}
+.hero-food-card .food-price { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--dark3);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+}
+.hero-badge-icon { font-size: 1.8rem; }
+.hero-badge-text h4 { font-size: 0.9rem; font-weight: 600; color: var(--blue-light); }
+.hero-badge-text p { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+section { padding: 6rem 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 4rem; }
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.section-label::before, .section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(59,130,246,0.4));
+}
+.section-label::after {
+  background: linear-gradient(to left, transparent, rgba(59,130,246,0.4));
+}
+.section-label span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  white-space: nowrap;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+.section-title em { font-style: italic; color: var(--green-light); }
+
+.section-sub {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto 3.5rem;
+}
+
+.about { background: var(--dark2); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.about-badges { display: flex; flex-direction: column; gap: 1rem; }
+.about-badge {
+  background: var(--dark3);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  transition: all 0.3s;
+}
+.about-badge:hover { border-color: var(--blue-light); transform: translateX(6px); }
+.about-badge-icon { font-size: 2rem; width: 50px; flex-shrink: 0; text-align: center; }
+.about-badge h4 { font-weight: 600; color: var(--blue-light); margin-bottom: 0.2rem; }
+.about-badge p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+.about-text { }
+.about-text h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.about-text h2 em { color: var(--green-light); font-style: italic; }
+.about-text p {
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  font-size: 0.98rem;
+}
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(59,130,246,0.15);
+}
+.about-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--green-light);
+  display: block;
+}
+.about-stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+.menu { background: var(--dark); }
+
+.menu-filters {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid rgba(59,130,246,0.25);
+  color: var(--muted);
+  padding: 0.55rem 1.3rem;
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: none;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--blue-light);
+  border-color: var(--blue-light);
+  color: var(--dark);
+  font-weight: 700;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.menu-card {
+  background: var(--dark2);
+  border: 1px solid rgba(59,130,246,0.12);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.35s;
+  position: relative;
+}
+.menu-card:hover { border-color: rgba(59,130,246,0.45); transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+
+.menu-card-top {
+  background: linear-gradient(135deg, var(--dark3), var(--slate));
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.menu-card-top::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 100%, rgba(59,130,246,0.15), transparent 70%);
+}
+
+.menu-badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: var(--blue-light);
+  color: var(--dark);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.menu-badge.new { background: var(--green-light); color: var(--dark); }
+.menu-badge.hot { background: var(--white); color: var(--dark); }
+
+.menu-card-body { padding: 1.4rem; }
+
+.menu-card-cat {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 0.4rem;
+}
+
+.menu-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.menu-card-desc {
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.menu-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green-light);
+}
+.menu-price span { font-size: 0.85rem; font-family: 'Outfit', sans-serif; color: var(--muted); }
+
+.add-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  border: none;
+  color: var(--dark);
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: var(--blue); transform: scale(1.1); }
+
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 800;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
+}
+.cart-overlay.open { opacity: 1; pointer-events: all; }
+
+.cart-sidebar {
+  position: fixed;
+  top: 0; right: -420px;
+  width: 420px;
+  height: 100vh;
+  background: var(--dark2);
+  border-left: 1px solid rgba(59,130,246,0.2);
+  z-index: 900;
+  transition: right 0.4s cubic-bezier(.25,.46,.45,.94);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+.cart-sidebar.open { right: 0; }
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(59,130,246,0.15);
+}
+.cart-header h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--green-light);
+}
+.cart-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--dark3);
+  border: 1px solid var(--slate);
+  color: var(--muted);
+  font-size: 1.2rem;
+  cursor: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cart-close:hover { border-color: var(--blue-light); color: var(--blue-light); }
+
+.cart-items { flex: 1; overflow-y: auto; }
+.cart-empty { text-align: center; padding: 3rem 0; color: var(--muted); }
+.cart-empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; }
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(59,130,246,0.08);
+}
+.cart-item-emoji { font-size: 2rem; width: 50px; text-align: center; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+.cart-item-price { font-size: 0.8rem; color: var(--blue-light); margin-top: 0.2rem; }
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.qty-btn {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--dark3);
+  border: 1px solid var(--slate);
+  color: var(--text);
+  cursor: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.qty-btn:hover { border-color: var(--blue-light); color: var(--blue-light); }
+.qty-num { font-weight: 700; min-width: 20px; text-align: center; font-size: 0.9rem; }
+
+.cart-footer {
+  border-top: 1px solid rgba(59,130,246,0.15);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.cart-total span:first-child { color: var(--muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.cart-total-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--green-light);
+}
+
+.checkout-btn {
+  width: 100%;
+  background: var(--blue-light);
+  color: var(--dark);
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: all 0.25s;
+}
+.checkout-btn:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59,130,246,0.3); }
+
+.cart-float {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--blue-light);
+  color: var(--dark);
+  border: none;
+  border-radius: 50px;
+  padding: 0.9rem 1.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: none;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 8px 30px rgba(59,130,246,0.4);
+  transition: all 0.25s;
+  transform: translateY(100px);
+  opacity: 0;
+}
+.cart-float.visible { transform: translateY(0); opacity: 1; }
+.cart-float:hover { background: var(--blue); transform: translateY(-3px); }
+.cart-count {
+  background: var(--dark);
+  color: var(--blue-light);
+  border-radius: 50%;
+  width: 22px; height: 22px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reservation { background: var(--dark2); }
+.reservation-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.reservation-info h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+}
+.reservation-info h2 em { color: var(--green-light); font-style: italic; }
+.reservation-info p { color: var(--muted); line-height: 1.8; margin-bottom: 2rem; }
+
+.info-items { display: flex; flex-direction: column; gap: 1rem; }
+.info-item { display: flex; align-items: flex-start; gap: 1rem; }
+.info-item-icon { font-size: 1.3rem; margin-top: 0.1rem; }
+.info-item h5 { font-weight: 600; color: var(--green-light); margin-bottom: 0.2rem; font-size: 0.9rem; }
+.info-item p { font-size: 0.85rem; color: var(--muted); }
+
+.res-form {
+  background: var(--dark3);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+.res-form h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--green-light);
+  margin-bottom: 1.5rem;
+}
+
+.form-group { margin-bottom: 1.25rem; }
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--dark2);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.8rem 1rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: text;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--blue-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+.form-group select option { background: var(--dark2); }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.contact { background: var(--dark); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.contact-card {
+  background: var(--dark2);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+.contact-card:hover { border-color: var(--blue-light); transform: translateY(-5px); }
+.contact-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+.contact-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--green-light); margin-bottom: 0.5rem; }
+.contact-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+footer {
+  background: var(--dark2);
+  border-top: 1px solid rgba(59,130,246,0.15);
+  padding: 3rem 0 2rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(59,130,246,0.1);
+}
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--blue-light);
+  margin-bottom: 1rem;
+  display: block;
+}
+.footer-about { font-size: 0.87rem; color: var(--muted); line-height: 1.7; }
+.footer-col h5 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 1.2rem;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-col ul a {
+  font-size: 0.87rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col ul a:hover { color: var(--green-light); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-bottom p { font-size: 0.8rem; color: var(--muted); }
+.footer-socials { display: flex; gap: 1rem; }
+.social-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--dark3);
+  border: 1px solid rgba(59,130,246,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.social-btn:hover { border-color: var(--blue-light); transform: translateY(-2px); }
+
+.toast {
+  position: fixed;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--dark3);
+  border: 1px solid var(--blue-light);
+  color: var(--green-light);
+  padding: 0.85rem 1.8rem;
+  border-radius: 50px;
+  font-size: 0.87rem;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.35s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(--green-light); color: var(--green-light); }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--dark2);
+  border: 1px solid rgba(59,130,246,0.3);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 480px;
+  width: 90%;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+  text-align: center;
+}
+.modal-overlay.open .modal { transform: scale(1); }
+.modal-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
+.modal h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--green-light);
+  margin-bottom: 0.75rem;
+}
+.modal p { color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+.modal-close-btn {
+  background: var(--blue-light);
+  color: var(--dark);
+  border: none;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  cursor: none;
+  transition: all 0.2s;
+}
+.modal-close-btn:hover { background: var(--blue); }
+
+.mobile-nav {
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  background: rgba(15,23,42,0.98);
+  border-bottom: 1px solid rgba(59,130,246,0.2);
+  padding: 1.5rem 2rem;
+  z-index: 490;
+  transform: translateY(-100%);
+  transition: transform 0.3s;
+  display: none;
+}
+.mobile-nav.open { transform: translateY(0); }
+.mobile-nav ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+.mobile-nav ul a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  display: block;
+  padding: 0.4rem 0;
+}
+.mobile-nav ul a:hover { color: var(--green-light); }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-order-btn { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav { display: block; }
+  .hero-content { grid-template-columns: 1fr; gap: 3rem; padding: 0 1.5rem; }
+  .hero-visual { display: none; }
+  .container { padding: 0 1.5rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .reservation-inner { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: repeat(3, 1fr); }
+  .cart-sidebar { width: 100%; right: -100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+  <div class="nav-logo">Ayuup <span>Restaurant</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">Guriga</a></li>
+    <li><a href="#about">Naga Warran</a></li>
+    <li><a href="#menu">Cuntooyinka</a></li>
+    <li><a href="#reservation">Buugsi</a></li>
+    <li><a href="#contact">Xiriir</a></li>
+  </ul>
+  <button class="nav-order-btn" onclick="openCart()">🛒 Dalbo Hadda</button>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <ul>
+    <li><a href="#home" onclick="toggleMobileNav()">🏠 Guriga</a></li>
+    <li><a href="#about" onclick="toggleMobileNav()">ℹ️ Naga Warran</a></li>
+    <li><a href="#menu" onclick="toggleMobileNav()">🍽️ Cuntooyinka</a></li>
+    <li><a href="#reservation" onclick="toggleMobileNav()">📅 Buugsi</a></li>
+    <li><a href="#contact" onclick="toggleMobileNav()">📞 Xiriir</a></li>
+    <li><a href="#menu" onclick="openCart(); toggleMobileNav()">🛒 Dalbo Hadda</a></li>
+  </ul>
+</div>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-tag">
+        <div class="hero-tag-line"></div>
+        <span>Cuntada Soomaalida ee Dhaqanka</span>
+        <div class="hero-tag-line"></div>
+      </div>
+      <h1>Dhadhanka<br><em>Soomaalida</em><br>Halkaan</h1>
+      <p class="hero-desc">Ayuup Restaurant waxay kusoo bandhigaysaa xirfadka jikaka Soomaalida — cuntooyin kala duwan oo aan laab leh, laga sameeyay walxo nadiif ah oo taabishooda ka muuqda.</p>
+      <div class="hero-actions">
+        <a href="#menu" class="btn-gold">🍽️ Arag Cuntooyinka</a>
+        <a href="#reservation" class="btn-ghost">📅 Jar Buugsi</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-cards">
+        <div class="hero-food-card">
+          <span class="food-emoji">🐑</span>
+          <div class="food-name">Hilib Geel</div>
+          <div class="food-price">$18</div>
+        </div>
+        <div class="hero-food-card">
+          <span class="food-emoji">🍚</span>
+          <div class="food-name">Bariis Iskukaris</div>
+          <div class="food-price">$12</div>
+        </div>
+        <div class="hero-food-card">
+          <span class="food-emoji">🥩</span>
+          <div class="food-name">Suqaar</div>
+          <div class="food-price">$14</div>
+        </div>
+        <div class="hero-food-card">
+          <span class="food-emoji">🫕</span>
+          <div class="food-name">Maraq Digaag</div>
+          <div class="food-price">$10</div>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <span class="hero-badge-icon">⭐</span>
+        <div class="hero-badge-text">
+          <h4>4.9 / 5.0 Xiddigood</h4>
+          <p>Ka badan 2,000 macmiil oo raalligelin</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-label"><span>Naga Warran</span></div>
+    <div class="about-grid reveal">
+      <div class="about-badges">
+        <div class="about-badge">
+          <div class="about-badge-icon">👨‍🍳</div>
+          <div>
+            <h4>Jiko Khibrad leh</h4>
+            <p>Jiko-yadeenu waxay leeyihiin in ka badan 15 sano oo khibrad ah cuntada Soomaalida.</p>
+          </div>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-icon">🌿</div>
+          <div>
+            <h4>Walxo Dabiici ah</h4>
+            <p>Dhammaan cuntooyin walxaha laga sameeyay waa kuwo dabiici ah oo nadiif ah.</p>
+          </div>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-icon">🕌</div>
+          <div>
+            <h4>Halaal 100%</h4>
+            <p>Dhammaan cuntooyin halaal buuxda, oo sax ah sida diinta islaamka ugu qoran.</p>
+          </div>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-icon">🚀</div>
+          <div>
+            <h4>Delivery Degdeg ah</h4>
+            <p>Waxaan gaadhsiinaa cuntada 30 daqiiqo gudahood, kulul oo macaan.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <h2>Taariikhda <em>Dhaqanka</em> Cuntada</h2>
+        <p>Ayuup Restaurant waxay ahayd guri yar oo 2010-kii la furay, laakiin maanta waxay noqotay mid ka mid ah restaurants-ka ugu caansan ee cuntada Soomaalida.</p>
+        <p>Waxaan aaminanahay in cuntadu ay tahay qaab dhaqameed iyo jacayl. Waxaan ku dadaalanaa in macaamiisheena kasta marka ay cuntadeena cunaan ay dareemaan guriga.</p>
+        <p>Ka Mogadishu ilaa caalamka — dhadhanka Soomaalida ayaan kuu keenaynaa, goobta aad joogtaba.</p>
+        <div class="about-stats">
+          <div>
+            <span class="about-stat-num">15+</span>
+            <span class="about-stat-label">Sano Khibrad</span>
+          </div>
+          <div>
+            <span class="about-stat-num">2K+</span>
+            <span class="about-stat-label">Macmiil</span>
+          </div>
+          <div>
+            <span class="about-stat-num">50+</span>
+            <span class="about-stat-label">Nooca Cunto</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="container">
+    <div class="section-label"><span>Cuntooyinka</span></div>
+    <h2 class="section-title reveal">Menu <em>Buuxda</em></h2>
+    <p class="section-sub reveal">Cuntooyinka dhaqanka Soomaalida — laga soo bilaabo hilib, kalluun, maraq, ilaa macmacaan.</p>
+
+    <div class="menu-filters reveal">
+      <button class="filter-btn active" onclick="filterMenu('all', this)">🍽️ Dhammaan</button>
+      <button class="filter-btn" onclick="filterMenu('hilib', this)">🥩 Hilib</button>
+      <button class="filter-btn" onclick="filterMenu('bariis', this)">🍚 Bariis</button>
+      <button class="filter-btn" onclick="filterMenu('maraq', this)">🫕 Maraq</button>
+      <button class="filter-btn" onclick="filterMenu('kalluun', this)">🐟 Kalluun</button>
+      <button class="filter-btn" onclick="filterMenu('macmacaan', this)">🍮 Macmacaan</button>
+      <button class="filter-btn" onclick="filterMenu('cabitaan', this)">🥤 Cabitaan</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<section class="reservation" id="reservation">
+  <div class="container">
+    <div class="section-label"><span>Buugsi</span></div>
+    <div class="reservation-inner reveal">
+      <div class="reservation-info">
+        <h2>Jar <em>Buugsi</em> Maanta</h2>
+        <p>Hubi jagadaada horeba si aad uga faa'iidaysato adeeggeena ugu fiican. Koox waaweyn ama xafladaha gaar ah waxaan u diyaarinaa meel gaar ah.</p>
+        <div class="info-items">
+          <div class="info-item">
+            <span class="info-item-icon">🕐</span>
+            <div>
+              <h5>Saacadaha Furitaanka</h5>
+              <p>Isniin – Arbaco: 11:00 AM – 10:00 PM<br>Khamiis – Axad: 10:00 AM – 11:00 PM</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-item-icon">📍</span>
+            <div>
+              <h5>Goobta</h5>
+              <p>123 Wadada Dhaqanka, Nairobi, Kenya<br>(Agagaarka Suuqa Weyn)</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-item-icon">📞</span>
+            <div>
+              <h5>Telefoon</h5>
+              <p>+254 700 123 456<br>+252 61 234 5678</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-item-icon">🅿️</span>
+            <div>
+              <h5>Parking</h5>
+              <p>Parking bilaash ah oo u gaar ah macaamiisheena</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-form">
+        <h3>📅 Jar Buugsiga</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Magacaaga</label>
+            <input type="text" id="resName" placeholder="Magacaaga buuxa">
+          </div>
+          <div class="form-group">
+            <label>Telefoon</label>
+            <input type="tel" id="resPhone" placeholder="+252 xx xxx xxxx">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Taariikhda</label>
+            <input type="date" id="resDate">
+          </div>
+          <div class="form-group">
+            <label>Saacadda</label>
+            <input type="time" id="resTime">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tirada Dadka</label>
+          <select id="resGuests">
+            <option value="">Xulo tirada</option>
+            <option value="1">1 Qof</option>
+            <option value="2">2 Qof</option>
+            <option value="3-4">3-4 Qof</option>
+            <option value="5-8">5-8 Qof</option>
+            <option value="9+">9+ Qof (Xafladaha)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fariimo Gaar ah (Ikhtiyaari)</label>
+          <textarea id="resNotes" placeholder="Wax gaar ah oo aad rabto in aan garanno..."></textarea>
+        </div>
+        <button class="btn-gold" style="width:100%; text-align:center; display:block;" onclick="submitReservation()">
+          ✅ Xaqiiji Buugsiga
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-label"><span>Xiriir</span></div>
+    <h2 class="section-title reveal">Nala <em>Xiriir</em></h2>
+    <p class="section-sub reveal">Waxaan had iyo jeer diyaar u nahay inaan ka caawino su'aalahaada.</p>
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <span class="contact-icon">📞</span>
+        <h4>Telefoon</h4>
+        <p>+254 700 123 456<br>+252 61 234 5678<br>Saacadaha: 10AM – 10PM</p>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">📧</span>
+        <h4>Email</h4>
+        <p>info@ayuuprestaurant.com<br>orders@ayuuprestaurant.com<br>Waxaan kugu jawaabayaa 24 sac</p>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">📍</span>
+        <h4>Goobta</h4>
+        <p>123 Wadada Dhaqanka<br>Nairobi, Kenya<br>Agagaarka Suuqa Weyn</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <span class="footer-logo">🍽️ Ayuup Restaurant</span>
+        <p class="footer-about">Waxaan ku raadsananahay in macaamiisheena kasta ay helaan khibra cunno oo aan naseeyaan. Cuntada Soomaalida ayaan kuu keenaynaa — kulul, macaan, oo buuxo.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Boggaga</h5>
+        <ul>
+          <li><a href="#home">Guriga</a></li>
+          <li><a href="#about">Naga Warran</a></li>
+          <li><a href="#menu">Cuntooyinka</a></li>
+          <li><a href="#reservation">Buugsi</a></li>
+          <li><a href="#contact">Xiriir</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Adeegyada</h5>
+        <ul>
+          <li><a href="#">Delivery</a></li>
+          <li><a href="#">Catering</a></li>
+          <li><a href="#">Xafladaha</a></li>
+          <li><a href="#">Qaado Cunno</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Ayuup Restaurant. Dhammaan xuquuqaha way xidna yihiin.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">📘</a>
+        <a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">🐦</a>
+        <a href="#" class="social-btn">▶️</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>🛒 Dambiilkaaga</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <span class="cart-empty-icon">🛒</span>
+      <p>Dambiilkaagu wuu madhan yahay.<br>Ku dar cuntooyinka aad jeceshahay!</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total">
+      <span>Wadarta Guud</span>
+      <span class="cart-total-price" id="cartTotal">$0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">💳 Bixi Lacagta</button>
+  </div>
+</div>
+
+<button class="cart-float" id="cartFloat" onclick="openCart()">
+  🛒 Dambiilka
+  <span class="cart-count" id="cartCountBadge">0</span>
+</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <span class="modal-icon" id="modalIcon">✅</span>
+    <h3 id="modalTitle">Mahadsanid!</h3>
+    <p id="modalMsg">Waxaa la qaaday dalbashaddaada.</p>
+    <button class="modal-close-btn" onclick="closeModal()">Xidh</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DB = {
+  get: (key) => JSON.parse(localStorage.getItem('ayuup_' + key) || 'null'),
+  set: (key, val) => localStorage.setItem('ayuup_' + key, JSON.stringify(val)),
+};
+
+const MENU_DATA = [
+  { id: 1, name: 'Hilib Geel', cat: 'hilib', emoji: '🐪', price: 18, desc: 'Hilib geel oo la shiilan, lagu karsiyay xawaash iyo saliid. Waa cunto aad u macaan.', badge: 'hot' },
+  { id: 2, name: 'Hilib Adhi', cat: 'hilib', emoji: '🐑', price: 16, desc: 'Hilib adhi oo laga sameeyay xawaash reer Soomaaliyeed. Kulul oo dhadhamin.', badge: '' },
+  { id: 3, name: 'Suqaar Digaag', cat: 'hilib', emoji: '🐔', price: 14, desc: 'Suqaar digaag oo la shiilan leh basasha, filfil, iyo xawaash garanaya.', badge: 'new' },
+  { id: 4, name: 'Baasto Hilib', cat: 'hilib', emoji: '🍝', price: 12, desc: 'Baasto Talyaaniga ah oo lagu darsay hilib shiidan oo Soomaali.', badge: '' },
+  { id: 5, name: 'Kebab Somali', cat: 'hilib', emoji: '🍢', price: 13, desc: 'Kebab hilib ah oo la korintay, ka sameysan hilib adhi iyo digaag.', badge: 'hot' },
+  { id: 6, name: 'Muqmad', cat: 'hilib', emoji: '🥩', price: 11, desc: 'Muqmad dhaqameed oo la shiilan saliidda geela — dhadhanka ugu qadiimiga ah.', badge: '' },
+  { id: 7, name: 'Bariis Iskukaris', cat: 'bariis', emoji: '🍚', price: 12, desc: 'Bariis Soomaali ah oo lagu karsiyay xawaash iyo saliid — midab dahabi ah, dhadhankuna macaan.', badge: 'hot' },
+  { id: 8, name: 'Bariis Basmati', cat: 'bariis', emoji: '🌾', price: 10, desc: 'Bariis basmati oo la darsay hilib geel, mid ka mid ah cuntada ugu macaan.', badge: '' },
+  { id: 9, name: 'Anjeero & Xoolaha', cat: 'bariis', emoji: '🥞', price: 9, desc: 'Anjeero Soomaaliyeed oo lala cuno maraq xoolaha ama macaan — wakhtiga qadoobka.', badge: 'new' },
+  { id: 10, name: 'Sabaayad', cat: 'bariis', emoji: '🫓', price: 7, desc: 'Sabaayad Soomaaliyeed oo dabin, macaan, lala cuno subag ama macmacaan.', badge: '' },
+  { id: 11, name: 'Maraq Hilib', cat: 'maraq', emoji: '🫕', price: 10, desc: 'Maraq kulul oo ka sameysan hilib geel, basal, iyo xawaash Soomaali ah.', badge: '' },
+  { id: 12, name: 'Maraq Digaag', cat: 'maraq', emoji: '🍲', price: 9, desc: 'Maraq digaag oo qoto dheer, leh khudaarta iyo xawaash.', badge: 'hot' },
+  { id: 13, name: 'Cambuulo', cat: 'maraq', emoji: '🫘', price: 8, desc: 'Cambuulo oo la kariyay subag iyo sonkor — macaan, dhinacna cuntada jilicsan.', badge: '' },
+  { id: 14, name: 'Maraq Digir', cat: 'maraq', emoji: '🥣', price: 7, desc: 'Maraq digir oo la darsay basal iyo xawaash, macaan oo dheeli tiran.', badge: 'new' },
+  { id: 15, name: 'Kalluun La Shiilay', cat: 'kalluun', emoji: '🐟', price: 16, desc: 'Kalluun badda ka yimid oo la shiilan, leh xawaash Soomaali ah iyo saytuun.', badge: 'hot' },
+  { id: 16, name: 'Kalluun La Karsiyay', cat: 'kalluun', emoji: '🎣', price: 14, desc: 'Kalluun la karsiyay maraq macaan ah oo leh khudaarta.', badge: '' },
+  { id: 17, name: 'Suqaar Kalluun', cat: 'kalluun', emoji: '🦐', price: 15, desc: 'Xidhmado kalluun ah oo la suqaaray leh basal iyo filfil.', badge: 'new' },
+  { id: 18, name: 'Halwa Soomaaliyeed', cat: 'macmacaan', emoji: '🍮', price: 6, desc: 'Halwa dhaqameed oo ka sameysan sonkor, subag, iyo noocyo kala duwan oo midho ah.', badge: 'hot' },
+  { id: 19, name: 'Muufo', cat: 'macmacaan', emoji: '🧇', price: 5, desc: 'Muufo macaan oo la karsiyay karbaash iyo sonkor — macaanida dhaqanka.', badge: '' },
+  { id: 20, name: 'Caano Geel', cat: 'macmacaan', emoji: '🥛', price: 4, desc: 'Caano geel oo dabiici ah — cuntada caafimaadka ugu badan ee dhaqanka.', badge: 'new' },
+  { id: 21, name: 'Moos Darsay', cat: 'macmacaan', emoji: '🍌', price: 5, desc: 'Moos macaan oo la darsay caano iyo sonkor — macmacaanta fudud.', badge: '' },
+  { id: 22, name: 'Shaah Soomaali', cat: 'cabitaan', emoji: '🍵', price: 3, desc: 'Shaah xawaash leh oo macaan — cabitaanka ugu caanka badan xilliga guuriga.', badge: 'hot' },
+  { id: 23, name: 'Caano Geel Qabow', cat: 'cabitaan', emoji: '🥤', price: 4, desc: 'Caano geel oo qabow leh caro iyo sonkor yar.', badge: '' },
+  { id: 24, name: 'Liin Macaan', cat: 'cabitaan', emoji: '🍋', price: 3, desc: 'Cabitaan liin ah oo qabow, macaan, xiiso leh.', badge: 'new' },
+  { id: 25, name: 'Qaxwo Soomaaliyeed', cat: 'cabitaan', emoji: '☕', price: 4, desc: 'Qaxwo xoog leh oo dhaqameed, leh xawaash iyo caano.', badge: '' },
+];
+
+let cart = DB.get('cart') || [];
+
+function saveCart() { DB.set('cart', cart); }
+
+function addToCart(id) {
+  const item = MENU_DATA.find(m => m.id === id);
+  const existing = cart.find(c => c.id === id);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+  saveCart();
+  renderCart();
+  showToast('✅ ' + item.name + ' dambiilka lagu daray!');
+  updateCartBadge();
+}
+
+function removeFromCart(id) {
+  const idx = cart.findIndex(c => c.id === id);
+  if (idx !== -1) {
+    if (cart[idx].qty > 1) cart[idx].qty--;
+    else cart.splice(idx, 1);
+  }
+  saveCart();
+  renderCart();
+  updateCartBadge();
+}
+
+function renderCart() {
+  const container = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+
+  if (cart.length === 0) {
+    container.innerHTML = `<div class="cart-empty"><span class="cart-empty-icon">🛒</span><p>Dambiilkaagu wuu madhan yahay.<br>Ku dar cuntooyinka aad jeceshahay!</p></div>`;
+    footer.style.display = 'none';
+    return;
+  }
+
+  const total = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  container.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <span class="cart-item-emoji">${c.emoji}</span>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-price">$${c.price} × ${c.qty} = $${(c.price * c.qty).toFixed(2)}</div>
+      </div>
+      <div class="cart-item-qty">
+        <button class="qty-btn" onclick="removeFromCart(${c.id})">−</button>
+        <span class="qty-num">${c.qty}</span>
+        <button class="qty-btn" onclick="addToCart(${c.id})">+</button>
+      </div>
+    </div>
+  `).join('');
+
+  footer.style.display = 'block';
+  document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+}
+
+function updateCartBadge() {
+  const count = cart.reduce((s, c) => s + c.qty, 0);
+  document.getElementById('cartCountBadge').textContent = count;
+  const floatBtn = document.getElementById('cartFloat');
+  if (count > 0) floatBtn.classList.add('visible');
+  else floatBtn.classList.remove('visible');
+}
+
+function openCart() {
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+function checkout() {
+  if (cart.length === 0) return;
+  const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+  const orders = DB.get('orders') || [];
+  orders.push({ id: Date.now(), items: [...cart], total, date: new Date().toISOString(), status: 'pending' });
+  DB.set('orders', orders);
+  cart = [];
+  saveCart();
+  renderCart();
+  updateCartBadge();
+  closeCart();
+  showModal('✅', 'Dalbadashaada Waa La Qaatay!', `Mahadsanid! Cuntadaadu way ku socotaa. Delivery: 20–35 daqiiqo. Wadarta: $${total.toFixed(2)}`);
+}
+
+let currentFilter = 'all';
+
+function renderMenu(filter = 'all') {
+  const grid = document.getElementById('menuGrid');
+  const items = filter === 'all' ? MENU_DATA : MENU_DATA.filter(m => m.cat === filter);
+
+  grid.innerHTML = items.map(m => `
+    <div class="menu-card">
+      <div class="menu-card-top">
+        ${m.emoji}
+        ${m.badge ? `<span class="menu-badge ${m.badge}">${m.badge === 'hot' ? '🔥 Hot' : m.badge === 'new' ? '✨ New' : m.badge}</span>` : ''}
+      </div>
+      <div class="menu-card-body">
+        <div class="menu-card-cat">${getCatLabel(m.cat)}</div>
+        <div class="menu-card-name">${m.name}</div>
+        <div class="menu-card-desc">${m.desc}</div>
+        <div class="menu-card-footer">
+          <div class="menu-price">$${m.price} <span>/ qof</span></div>
+          <button class="add-btn" onclick="addToCart(${m.id})" title="Ku dar dambiilka">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getCatLabel(cat) {
+  return { hilib: '🥩 Hilib', bariis: '🍚 Bariis', maraq: '🫕 Maraq', kalluun: '🐟 Kalluun', macmacaan: '🍮 Macmacaan', cabitaan: '🥤 Cabitaan' }[cat] || cat;
+}
+
+function filterMenu(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenu(cat);
+}
+
+function submitReservation() {
+  const name = document.getElementById('resName').value.trim();
+  const phone = document.getElementById('resPhone').value.trim();
+  const date = document.getElementById('resDate').value;
+  const time = document.getElementById('resTime').value;
+  const guests = document.getElementById('resGuests').value;
+
+  if (!name || !phone || !date || !time || !guests) {
+    showToast('❌ Fadlan buuxi dhammaan goobaha muhiimka ah!', 'error');
+    return;
+  }
+
+  const reservations = DB.get('reservations') || [];
+  reservations.push({ id: Date.now(), name, phone, date, time, guests, notes: document.getElementById('resNotes').value, status: 'confirmed', createdAt: new Date().toISOString() });
+  DB.set('reservations', reservations);
+
+  ['resName','resPhone','resDate','resTime','resNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('resGuests').value = '';
+
+  showModal('📅', 'Buugsiga Waa La Xaqiijiyay!', `Mahadsanid ${name}! Buugsigaaga ${date} saacadda ${time} ee ${guests} qof waa la xaqiijiyay. Waxaanu kugula soo xiriiri doonnaa ${phone}.`);
+}
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+function showModal(icon, title, msg) {
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+});
+
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+renderMenu();
+renderCart();
+updateCartBadge();
+
+document.getElementById('resDate').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
